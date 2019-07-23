@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import styled from 'styled-components';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useMutation } from 'react-apollo-hooks';
+import { LOG_IN } from './AuthQuery';
 import AuthButton from '../../components/AuthButton';
 import AuthInput from '../../components/AuthInput';
 import constans from '../../constans';
-import useInput from '../../Hooks/useInput'
+import useInput from '../../Hooks/useInput';
+import emailReg from '../../emailReg';
 
 const View = styled.View`
   flex: 1;
@@ -42,15 +45,39 @@ const Signup = styled.View`
 // <Input placeholder={"비밀번호"} secureTextEntry={true}/>
 export default ({ navigation }) => {
   const email = useInput("")
+  const [requestSecret, {loading}] = useMutation(LOG_IN,{
+    variables: {
+      email:email.value
+    },
+    update: (_, {data: { requestSecret }}) => {
+      const [hasEmail, hasSecret] = requestSecret;
+      if(hasEmail === "false") {
+        Alert.alert("존재하지 않는 email 입니다.")
+    } else if (hasSecret === "false") {
+        navigation.navigate("SendConfrimSecret")
+      } else {
+        navigation.navigate("Confirm",{ email: email.value });
+      }
+    }
+  });
 
-  const touch = () => {
-    const { value } = email;
-    const emailRex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  if(value === "" ) {
+  const handleLogin = async () => {
+
+  if(email.value === "" ) {
      Alert.alert("empty");
-  } else if (!emailRex.test(value)) {
+  } else if (!emailReg(email.value)) {
      Alert.alert("not email")
-  }}
+  }
+  try {
+    await requestSecret();
+  } catch (e){
+    console.log(e);
+  }
+}
+  if(navigation.getParam('email') !== undefined) {
+    email.onChangeText = navigation.getParam('email');
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
@@ -62,8 +89,9 @@ export default ({ navigation }) => {
           autoCapitalize={'none'}
           autoCorrect={false}
           returnKeyType={"send"}
+          onSubmitEditing={handleLogin}
           {...email} />
-        <AuthButton text={"로그인"} onPress={touch} />
+        <AuthButton text={"로그인"} loading={loading} onPress={handleLogin} />
         <RowTouch onPress={() => navigation.navigate("Login")}>
           <GreyText>로그인 상세 정보를 잊으셨나요? </GreyText><Text>로그인 도움말 보기</Text>
         </RowTouch>

@@ -5,8 +5,8 @@ import constans from '../constans';
 
 
 const Container = styled.View`
-  margin-bottom:30px;
-`
+  margin-bottom:15px;
+`;
 
 const Input = styled.TextInput`
   width:${constans.width - 80};
@@ -32,6 +32,8 @@ const AuthInput = ({
   autoCapitalize="sentences",
   onEndEditing=()=>null,
   returnKeyType="done",
+  onSubmitEditing,
+  editale=true,
   }) => {
   return(
   <Container>
@@ -46,6 +48,8 @@ const AuthInput = ({
       autoCorrect={autoCorrect}
       onEndEditing={onEndEditing}
       returnKeyType={returnKeyType}
+      onSubmitEditing={onSubmitEditing}
+      editale={editale}
        />
   </Container>
 )}
@@ -87,7 +91,15 @@ AuthInput.propTypes = {
 
   autoCorrect:propTypes.bool,
   onEndEditing:propTypes.func,
-  returnKeyType:propTypes.string,
+  returnKeyType:propTypes.oneOf([
+    "done",
+    "go",
+    "next",
+    "search",
+    "send"
+  ]),
+  onSubmitEditing:propTypes.func,
+  editale:propTypes.bool,
 
 }
 

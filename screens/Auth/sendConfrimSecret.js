@@ -7,12 +7,13 @@ import constans from '../../constans';
 
 const View = styled.View`
   flex: 1;
-  justify-content:center;
   align-items: center;
+  top:${constans.height/4};
 `;
 
 const Text = styled.Text`
-  font-size:16px;
+  font-size:20px;
+  margin-bottom:30px;
 `
 const GreyText = styled.Text`
   font-size:16px;
@@ -39,22 +40,12 @@ const Signup = styled.View`
 
 // <Input placeholder={"비밀번호"} secureTextEntry={true}/>
 export default ({ navigation }) => {
+  const email = navigation.getParam("email");
   return (
     <View>
       <Image resizeMode={"contain"} source={require("../../assets/logo.png")} />
-      <AuthInput
-        value={""}
-        placeholder={"비밀번호"}
-        secureTextEntry={true} />
-      <AuthButton text={"로그인"} onPress={() => navigation.navigate("Login")}/>
-      <RowTouch onPress={() => navigation.navigate("Login")}>
-        <GreyText>로그인 상세 정보를 잊으셨나요? </GreyText><Text>로그인 도움말 보기</Text>
-      </RowTouch>
-      <Signup>
-        <RowTouch onPress={() => navigation.navigate("Signup")}>
-          <GreyText>계정이 없으신가요? </GreyText><Text>가입하기</Text>
-        </RowTouch>
-      </Signup>
+      <Text>등록하신 이메일로 비밀번호가 전송됩니다.</Text>
+      <AuthButton text={"다음"} onPress={() => navigation.navigate("Confirm",{ email })}/>
     </View>
   )
 }

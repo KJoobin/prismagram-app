@@ -1,10 +1,10 @@
 import React from 'react';
+import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components';
 import propTypes from 'prop-types'
 import constans from '../constans';
 
-const TouchableOpacity = styled.TouchableOpacity`
-
+const TouchableWithoutFeedback = styled.TouchableWithoutFeedback`
 `
 const Container = styled.View`
   width:${constans.width - 80};
@@ -12,6 +12,7 @@ const Container = styled.View`
   background-color:${(props) => props.theme.blueColor};
   justify-content:center;
   align-items:center;
+  margin-top:15px;
 `
 
 const Text = styled.Text`
@@ -20,17 +21,19 @@ const Text = styled.Text`
   font-weight:500;
 `
 
-const AuthButton = ({text,onPress}) => (
-  <TouchableOpacity onPress={onPress}>
+const AuthButton = ({ text, onPress, loading = false }) => (
+
+  <TouchableWithoutFeedback disabled={loading} onPress={onPress}>
     <Container>
-      <Text>{text}</Text>
+      {loading ? <ActivityIndicator size={"large"} color={'white'} /> : <Text>{text}</Text> }
     </Container>
-  </TouchableOpacity>
+  </TouchableWithoutFeedback>
 )
 
 AuthButton.propTypes = {
   text: propTypes.string.isRequired,
-  onPress: propTypes.func.isRequired
+  onPress:propTypes.func.isRequired,
+  loading: propTypes.bool
 }
 
 export default AuthButton;
