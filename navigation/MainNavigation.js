@@ -4,12 +4,19 @@ import PhotoNavigation from './PhotoNavigation';
 import MessageNavigation from './MessageNavigation';
 
 const MainNavigation = createStackNavigator({
-  TabNavigation,
-  PhotoNavigation,
-  MessageNavigation
+  TabNavigation:{
+    screen:TabNavigation,
+  },
+  MessageNavigation:{
+    screen:MessageNavigation,
+  },
+  PhotoNavigation:{
+    screen:PhotoNavigation,
+  }
 },{
-  headerMode: "none",
-  mode: "modal"
+  mode: "card",
+  headerMode:"none"
+
 });
 
 export default createAppContainer(MainNavigation);

@@ -1,15 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withNavigation } from 'react-navigation';
-import { TouchableOpacity } from 'react-native';
+import { Platform } from 'react-native';
+import NavIcon from '../components/NavIcon'
 
 
-const Text = styled.Text`
-
+const TouchableOpacity = styled.TouchableOpacity`
+  padding-right:20px;
 `
+
+
 
 export default withNavigation(({ navigation }) => (
   <TouchableOpacity onPress={() => { navigation.navigate("MessageNavigation")}}>
-    <Text>Message</Text>
+    <NavIcon name={Platform.OS === "ios" ? 'ios-paper-plane' : 'md-paper-plane'} />
   </TouchableOpacity>
 ));

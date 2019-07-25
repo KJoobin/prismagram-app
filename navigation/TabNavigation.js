@@ -1,50 +1,71 @@
 import React from 'react';
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
-import { View } from 'react-native';
+import { View,Platform } from 'react-native';
+import styled from 'styled-components';
 import Home from '../screens/Home';
 import Notification from '../screens/Notification';
 import Profile from '../screens/Profile';
 import Search from '../screens/Search';
 import MessageLink from '../components/MessageLink';
+import NavIcon from '../components/NavIcon'
 
 const stackFactory = (initialRoute, customConfig) =>
-createStackNavigator({
-  initialRoute: {
-    screen: initialRoute,
-    navigationOptions: {
-      ...customConfig
+  createStackNavigator({
+    initialRoute: {
+      screen: initialRoute,
+      navigationOptions: {
+        ...customConfig
+      }
     }
-  }
-})
+  })
 
 
 const TabNavigation = createBottomTabNavigator({
-  Home: stackFactory(Home,{
+  Home:{
+    screen: stackFactory(Home,{
     headBackTitleVisible:false,
     headerRight: <MessageLink />
   }),
-  Notification,
+    navigationOptions: {
+      tabBarIcon: <NavIcon name={Platform.OS === 'ios' ? "ios-home" : "md-home" } color='blue' />
+    }},
+
+  Search:{
+    screen:Search,
+    navigationOptions:{
+      tabBarIcon: <NavIcon name={Platform.OS === 'ios' ? "ios-search" : "md-search" } />
+    }},
+
   add:{
     screen: View,
     navigationOptions:{
       tabBarOnPress: ({ navigation })=> {
-        navigation.navigate("PhotoNavigation")
+        navigation.navigate("PhotoNavigation")},
+        tabBarIcon: <NavIcon name={Platform.OS === 'ios' ? "ios-add-circle" : "md-add-circle" } />
+      }},
+
+  Notification:{
+    screen:Notification,
+    navigationOptions:{
+      tabBarIcon: <NavIcon name={Platform.OS === 'ios' ? "ios-heart" : "md-heart" } />
+    }},
+
+
+  Profile:{
+    screen: Profile,
+    navigationOptions:{
+      tabBarIcon: <NavIcon name={Platform.OS === 'ios' ? "ios-person" : "md-person" } />
+    }},
+
+  },{
+      backBehavior:"history",
+      tabBarOptions: {
+        activeTintColor: 'black',
+        inactiveTintColor: 'white',
+        showLabel:false,
+        keyboardHidesTabBar:true,
       }
-    },
-  },
-  Profile,
-  Search
-},{
-  mode: "modal",
-    backBehavior:"history",
-    tabBarOptions: {
-      activeTintColor: '#e91e63',
-      labelStyle: {
-        fontSize: 12,
-      },
-      keyboardHidesTabBar:true,
-    }
-}
+  }
 );
 
 export default createAppContainer(TabNavigation);
