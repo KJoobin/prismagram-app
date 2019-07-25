@@ -14,6 +14,7 @@ const stackFactory = (initialRoute, customConfig) =>
     initialRoute: {
       screen: initialRoute,
       navigationOptions: {
+        headerStyle:{backgroundColor:"#FAFAFA"},
         ...customConfig
       }
     }
@@ -27,13 +28,13 @@ const TabNavigation = createBottomTabNavigator({
     headerRight: <MessageLink />
   }),
     navigationOptions: {
-      tabBarIcon: <NavIcon name={Platform.OS === 'ios' ? "ios-home" : "md-home" } color='blue' />
+      tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-home" : "md-home" } color='blue' />
     }},
 
   Search:{
     screen:Search,
     navigationOptions:{
-      tabBarIcon: <NavIcon name={Platform.OS === 'ios' ? "ios-search" : "md-search" } />
+      tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-search" : "md-search" } />
     }},
 
   add:{
@@ -47,14 +48,14 @@ const TabNavigation = createBottomTabNavigator({
   Notification:{
     screen:Notification,
     navigationOptions:{
-      tabBarIcon: <NavIcon name={Platform.OS === 'ios' ? "ios-heart" : "md-heart" } />
+      tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-heart" : "md-heart" } />
     }},
 
 
   Profile:{
     screen: Profile,
     navigationOptions:{
-      tabBarIcon: <NavIcon name={Platform.OS === 'ios' ? "ios-person" : "md-person" } />
+      tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-person" : "md-person" } />
     }},
 
   },{
@@ -64,6 +65,7 @@ const TabNavigation = createBottomTabNavigator({
         inactiveTintColor: 'white',
         showLabel:false,
         keyboardHidesTabBar:true,
+        style:{backgroundColor:"#FAFAFA"}
       }
   }
 );
