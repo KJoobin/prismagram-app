@@ -1,10 +1,16 @@
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import Messages from '../screens/Messages/Messages'
 import Message from '../screens/Messages/Message'
+import { stackStyles } from './config';
 
-const MessageNavigation = createBottomTabNavigator({
-  Messages,
-  Message
-})
-
-export default createAppContainer(MessageNavigation)
+export default MessageNavigation = createStackNavigator({
+    Messages,
+    Message
+  },{
+    defaultNavigationOptions:{
+      headerStyle:{
+        ...stackStyles
+      }
+    }
+  }
+);
