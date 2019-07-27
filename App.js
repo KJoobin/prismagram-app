@@ -23,6 +23,7 @@ export default function App() {
 
   //App 이 시작되기전에 로드되어야할 ( Icon, font , img ... )
   const preLoad = async () => {
+    // AsyncStorage.clear();
     try {
       await Font.loadAsync({
         ...Ionicons.font
@@ -35,9 +36,15 @@ export default function App() {
       });
       const client = new ApolloClient({
         cache,
+        request: async operation => {
+          const token = await AsyncStorage.getItem("token");
+          console.log(token);
+          return operation.setContext({
+            headers: { Authorization: `Bearer ${token}` }
+          })
+        },
         ...apolloClientOptions
       });
-      await AsyncStorage.clear();
       const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
       if(isLoggedIn === null || isLoggedIn === "false") {
         setIsLoggedIn(false);
