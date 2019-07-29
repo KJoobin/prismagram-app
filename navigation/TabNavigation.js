@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
-import { View,Platform } from 'react-native';
+import { View,Platform, Image} from 'react-native';
 import styled from 'styled-components';
 import Home from '../screens/Home';
 import Notification from '../screens/Notification';
@@ -28,7 +28,8 @@ export default TabNavigation = createBottomTabNavigator({
   Home:{
     screen: stackFactory(Home,{
     headBackTitleVisible:false,
-    headerRight: <MessageLink />
+    headerRight: <MessageLink />,
+    headerLeft:<Image resizeMode='contain' style={{width:125}}source={require('../assets/logo.png')} />
   }),
     navigationOptions: {
       tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-home" : "md-home" } />
