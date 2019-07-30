@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
-import { View,Platform, Image} from 'react-native';
+import { View,Platform, Image, Text} from 'react-native';
 import styled from 'styled-components';
 import Home from '../screens/Home';
 import Notification from '../screens/Notification';
@@ -36,9 +36,7 @@ export default TabNavigation = createBottomTabNavigator({
     }},
 
   Search:{
-    screen:stackFactory(Search,{
-
-    }),
+    screen:stackFactory(Search),
     navigationOptions:{
       tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-search" : "md-search" } />
     }},
@@ -52,7 +50,9 @@ export default TabNavigation = createBottomTabNavigator({
       }},
 
   Notification:{
-    screen:stackFactory(Notification),
+    screen:stackFactory(Notification,{
+      headerTitle:<Text>Notification</Text>
+    }),
     navigationOptions:{
       tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-heart" : "md-heart" } />
     }},
