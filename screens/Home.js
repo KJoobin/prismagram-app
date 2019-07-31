@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FlatList } from 'react-native'
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -55,20 +55,24 @@ const Text = styled.Text`
 
 `;
 
-export default (props) => {
-  const { data: {seeFeed : data } , loading, refetch } = useQuery(SEE_FEED)
+export default () => {
+  console.log("home");
+  const [ refresh, setRefresh ] = useState(false);
+  const { data  , loading, refetch } = useQuery(SEE_FEED);
   const refreshHandle = () => {
+    setRefresh(true);
     refetch();
+    setRefresh(false);
     console.log('..')
   }
   return (
     <>
-    {loading ? <Loader / > :
+    {loading || data === undefined ? <Loader / > :
       <FlatList
-        data={data}
+        data={data.seeFeed}
         keyExtractor={ item => item.id}
         onRefresh={refreshHandle}
-        refreshing={false}
+        refreshing={refresh}
         renderItem={({item}) =>
         <Post
         id={item.id}

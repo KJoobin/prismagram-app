@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Home from '../screens/Home';
 import Notification from '../screens/Notification';
 import Profile from '../screens/Profile';
-import Search from '../screens/Search';
+import Search from '../screens/Search/SearchPrasenter';
 import MessageLink from '../components/MessageLink';
 import NavIcon from '../components/NavIcon'
 import { stackStyles } from './config';
