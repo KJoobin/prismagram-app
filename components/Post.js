@@ -66,15 +66,10 @@ const Post = ({id,location,caption, user, files = [], likeCount, comments = [], 
   const [ counting, setCounting] = useState(likeCount)
   const [ likeToggle, {loading }] = useMutation(TOGGLE_LIKE,{
     variables:{ postId : id },
-    update: (_, { data: { toggleLike } }) => {
-      console.log(isLiked);
-      console.log(toggleLike);
-      console.log(id);
-    }
   })
   const likePress = async () => {
     try {
-      setCounting(counting + 1)
+      liked ? setCounting(counting - 1) : setCounting(counting + 1)
       likeToggle();
       setLiked(!liked)
     } catch (e) {
