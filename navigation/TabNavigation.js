@@ -8,6 +8,7 @@ import Profile from '../screens/Profile';
 import Search from '../screens/Search/SearchPrasenter';
 import MessageLink from '../components/MessageLink';
 import NavIcon from '../components/NavIcon'
+import Detail from '../screens/Detail';
 import { stackStyles } from './config';
 
 const stackFactory = (initialRoute, customConfig) =>
@@ -15,13 +16,19 @@ const stackFactory = (initialRoute, customConfig) =>
     initialRoute: {
       screen: initialRoute,
       navigationOptions: {
+
+        ...customConfig
+      }
+    },
+    Detail,
+    },{
+      defaultNavigationOptions: {
         headerStyle:{
           ...stackStyles
         },
-        ...customConfig
       }
     }
-  })
+  )
 
 
 export default TabNavigation = createBottomTabNavigator({

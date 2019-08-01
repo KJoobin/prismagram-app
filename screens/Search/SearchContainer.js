@@ -1,18 +1,32 @@
 import React, { useState } from 'react';
-import { TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Keyboard, FlatList } from 'react-native';
 import { useMutation } from 'react-apollo-hooks';
 import { gql } from 'apollo-boost';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Loader from '../../components/Loader';
+import constans from '../../constans';
 
+const WIDTH = constans.width;
+
+const TouchableWithoutFeedback = styled.TouchableWithoutFeedback`
+  flex-direction:row;
+
+`;
 const View = styled.View`
   flex:1;
   justify-content:center;
   align-items:center;
 `;
 const Text = styled.Text``;
-const Touchable = styled.TouchableOpacity``;
+const Touchable = styled.TouchableOpacity`
+  width:${constans.width / 3};
+  height:${constans.width / 3};
+`;
+const Img = styled.Image`
+  width:${constans.width / 3};
+  height:${constans.width / 3};
+`;
 
 const SEARCH_POST = gql`
   query searchPost($term: String!) {
@@ -34,10 +48,8 @@ const SearchContainer = ({ term, typing, navigation }) => {
   const [searchPost, { loading }] = useMutation(SEARCH_POST,{
     variables:{ term: term },
     update:(_,{ data: { searchPost : data } }) => {
-      console.log(term);
       setPosts(data);
-    }
-  },);
+    },});
   const searchPostMutation = async () => {
     try {
       await searchPost();
@@ -50,32 +62,30 @@ const SearchContainer = ({ term, typing, navigation }) => {
     setOnce(true);
   }
 
-  console.log(typing, loading, once);
-
   if( typing && !loading && once ) {
     searchPostMutation();
+  };
+  let columnStyle = null
+  if(posts.length > 1) {
+     columnStyle = { flexDirection:"column"}
   }
-  console.log(posts.length);
   return(
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View>
-      {loading ? <Loader /> : (
-        <>
-      {posts.map((post) =>{
-        if(post.files[0].url.length >= 1) {
-        return (
-          <Touchable key={post.id}>
-            <Text>{post.files[0].url}</Text>
-          </Touchable>
+    <TouchableWithoutFeedback>
+    { loading ? <Loader / > :
+      <FlatList
+        data={posts}
+        keyExtractor={ item => item.id}
+        numColumns={3}
+        renderItem={({item}) => {
+          return(
+            <Touchable onPress={()=> navigation.navigate("Detail", { id : item.id } ) } >
+              <Img source={{ uri: item.files[0].url}} />
+            </Touchable>
           )
         }
-        })
       }
-      </>
-    )}
-
-        <Text>search</Text>
-      </View>
+      />
+    }
     </TouchableWithoutFeedback>
   )
 }

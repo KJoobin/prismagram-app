@@ -14,7 +14,6 @@ const Text = styled.Text``
 export default class extends React.Component {
 
   constructor(props) {
-    console.log("constructor")
     super(props);
     const { navigation } = props;
     this.state = {
@@ -30,7 +29,6 @@ export default class extends React.Component {
   };
 
   static navigationOptions = ({ navigation }) => {
-    console.log("navigationOptions")
     return ({
     headerTitle:<SearchInput
       value={navigation.getParam('term',"") }
@@ -57,27 +55,23 @@ export default class extends React.Component {
       term: text
     })
     setTimeout(()=> {
-      console.log("setTiem")
       this.setState({ typing:true })
     },4000);
   };
 
   shouldComponentUpdate(_,nextState){
-    console.log("shouldComponentUpdate",this.state, "\n" ,nextState)
     return ( this.state.term !== nextState.term ||
       this.state.typing !== nextState.typing )
   };
 
   componentDidUpdate(){
-    console.log("componentDidUpdate")
     this.setState({
       typing:false
     });
   }
   render() {
-    console.log("render")
    return (
-        <SearchContainer term={this.state.term} typing={this.state.typing} />
+        <SearchContainer navigation={this.props.navigation} term={this.state.term} typing={this.state.typing} />
     )
   }
 }
