@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Loader from '../../components/Loader';
 import constans from '../../constans';
+import PostCard from '../../components/PostCard';
 
 const WIDTH = constans.width;
 
@@ -23,17 +24,12 @@ const Touchable = styled.TouchableOpacity`
   width:${constans.width / 3};
   height:${constans.width / 3};
 `;
-const Img = styled.Image`
-  width:${constans.width / 3};
-  height:${constans.width / 3};
-`;
+
 
 const SEARCH_POST = gql`
   query searchPost($term: String!) {
     searchPost(term: $term){
       id,
-      likeCount,
-      commentCount,
       files{
         id
         url
@@ -71,19 +67,20 @@ const SearchContainer = ({ term, typing, navigation }) => {
   }
   return(
     <TouchableWithoutFeedback>
-    { loading ? <Loader / > :
+    { loading ?
+      <Loader / > :
       <FlatList
         data={posts}
         keyExtractor={ item => item.id}
         numColumns={3}
         renderItem={({item}) => {
           return(
-            <Touchable onPress={()=> navigation.navigate("Detail", { id : item.id } ) } >
-              <Img source={{ uri: item.files[0].url}} />
-            </Touchable>
+            <PostCard
+              id={item.id}
+              file={item.files[0]}
+              navigation={navigation}/>
           )
-        }
-      }
+        }}
       />
     }
     </TouchableWithoutFeedback>
