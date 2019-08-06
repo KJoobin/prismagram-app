@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FlatList, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import PostCard from './PostCard';
 import constans from '../constans';
+import EditModal from './EditModal';
+import styles from '../styles';
 
 
 const Touchable = styled.TouchableOpacity`
@@ -29,7 +31,8 @@ justify-content:center;
 align-items:center;
 padding:15px;
 `;
-const EditButton = styled.Button``;
+const EditButton = styled.Button`
+`;
 const Avatar = styled.Image`
   width:${constans.width / 4};
   height:${constans.width / 4};
@@ -49,18 +52,36 @@ const BioText = styled.Text`
 `;
 
 const User =  ({
-  navigation,
-  photo,
   posts,
+  photo,
+  setPhoto,
   fullName,
+  navigation,
   postCount,
   followingCount,
   followerCount,
   bio,
+  setBio,
+  editBio,
   isSelf,
+  email,
+  editProfile,
+  cancel,
+  modal,
+  setModal
  }) => {
   return (
-    <ScrollView style={{backgroundColor:"#efefef",}}>
+    <>
+    {modal &&
+      <EditModal
+        fullName={fullName}
+        photo={photo}
+        email={email}
+        bio={bio}
+        cancel={cancel}
+        editBio={editBio}
+        setModal={setModal}/>}
+    <ScrollView style={{backgroundColor:styles.bgColor}}>
       <UserWapper>
           <Avatar source={{uri : photo}} />
           <Summary>
@@ -85,8 +106,8 @@ const User =  ({
       <BioWapper>
         <BioText>{bio}</BioText>
         {isSelf &&
-          <Touchable style={{backgroundColor:"white", borderRadius:10, marginTop:15,}}>
-            <EditButton color={""}title={"프로필 수정"}/>
+          <Touchable style={{borderWidth:1,borderColor:styles.darkGreyColor,borderStyle:"solid", borderRadius:10, marginTop:15,}} onPress={editProfile}>
+            <EditButton color={""}title={"프로필 수정"} onPress={editProfile}/>
           </Touchable>
         }
       </BioWapper>
@@ -104,18 +125,28 @@ const User =  ({
           }}
         />
     </ScrollView>
+    </>
   )
 }
 
 User.propTypes = {
-  photo:PropTypes.string.isRequired,
-  posts:PropTypes.array.isRequired,
+  setPhoto:PropTypes.func.isRequired,
+  navigation:PropTypes.object.isRequired,
+  setBio:PropTypes.func.isRequired,
+  editBio:PropTypes.func.isRequired,
+  editProfile:PropTypes.func.isRequired,
+  cancel:PropTypes.func.isRequired,
   fullName:PropTypes.string.isRequired,
-  postCount:PropTypes.number.isRequired,
-  followingCount:PropTypes.number.isRequired,
+  posts:PropTypes.array.isRequired,
+  email:PropTypes.string.isRequired,
   followerCount:PropTypes.number.isRequired,
-  bio:PropTypes.string.isRequired,
+  followingCount:PropTypes.number.isRequired,
+  postCount:PropTypes.number.isRequired,
   isSelf:PropTypes.bool.isRequired,
+  photo:PropTypes.string.isRequired,
+  bio:PropTypes.string.isRequired,
+  modal:PropTypes.bool.isRequired,
+  setModal:PropTypes.func.isRequired,
 }
 
 export default User;
