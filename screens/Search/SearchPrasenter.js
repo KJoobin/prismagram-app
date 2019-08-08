@@ -49,19 +49,18 @@ export default class extends React.Component {
     const { navigation } = this.props
     this.setState({
       term : text,
-      typing: true
     });
     navigation.setParams({
       term: text
     })
     setTimeout(()=> {
       this.setState({ typing:true })
-    },4000);
+    },5000);
   };
 
   shouldComponentUpdate(_,nextState){
-    return ( this.state.term !== nextState.term ||
-      this.state.typing !== nextState.typing )
+    console.log(nextState.typing);
+    return ( this.state.term === nextState.term && nextState.typing !== this.state.typing )
   };
 
   componentDidUpdate(){

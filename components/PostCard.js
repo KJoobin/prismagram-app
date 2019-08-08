@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import constans from '../constans';
 
