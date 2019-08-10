@@ -29,6 +29,7 @@ export default ({ navigation }) => {
   const [state, setState] = useState(false);
   const [selectPhoto, setSelectPhoto] = useState();
   const [allPhotos, setAllPhotos] = useState();
+  const [refreshing, setRefreshing] = useState(false);
   let opacity = 1;
 
   const setPermission = async () => {
@@ -49,6 +50,7 @@ export default ({ navigation }) => {
       const [first] = assets;
       await setSelectPhoto(first);
       await setAllPhotos(assets);
+      console.log(assets);
     } catch (e) {
       console.log(e);
     } finally {
@@ -76,6 +78,16 @@ export default ({ navigation }) => {
     ]
   )
   }
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await setPermission();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setRefreshing(false);
+    }
+  }
 
 
   useEffect(() => {
@@ -98,6 +110,8 @@ export default ({ navigation }) => {
               data={allPhotos}
               extraData={selectPhoto}
               numColumns={3}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
               keyExtractor={ item => item.id}
               renderItem={({item}) =>
               <Touchable
