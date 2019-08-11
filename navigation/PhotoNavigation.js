@@ -4,23 +4,33 @@ import TakePhoto from '../screens/Photo/TakePhoto'
 import UploadPhoto from '../screens/Photo/UploadPhoto'
 import { stackStyles } from './config';
 
-const PhotoTabs = createMaterialTopTabNavigator({
-    SelectPhoto,
-    TakePhoto,
+const stackFactory = (initialRoute, customConfig) =>
+  createStackNavigator({
+    initialRoute: {
+      screen: initialRoute,
+      navigationOptions: {
+
+        ...customConfig
+      }
+    },
+    },{
+      defaultNavigationOptions: {
+        headerStyle:{
+          ...stackStyles
+        },
+      }
+    }
+  )
+
+export default createMaterialTopTabNavigator({
+    SelectPhoto:{
+      screen:stackFactory(SelectPhoto)
+    },
+    TakePhoto:{
+      screen:stackFactory(TakePhoto)
+    },
   },{
     tabBarPosition: "bottom",
     initialRouteName: "TakePhoto",
   }
 );
-
-export default createStackNavigator({
-    PhotoTabs,
-    UploadPhoto
-  },{
-    defaultNavigationOptions:{
-      headerStyle:{
-        ...stackStyles
-      }
-    }
-  }
-)

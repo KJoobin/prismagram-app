@@ -64,12 +64,12 @@ export default TabNavigation = createBottomTabNavigator({
       tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-heart" : "md-heart" } />
     }},
 
+    Profile:{
+      screen: stackFactory(Profile),
+      navigationOptions:{
+        tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-person" : "md-person" } />
+      }},
 
-  Profile:{
-    screen: stackFactory(Profile),
-    navigationOptions:{
-      tabBarIcon: ({ focused }) => <NavIcon focused={focused} name={Platform.OS === 'ios' ? "ios-person" : "md-person" } />
-    }},
 
   },{
       backBehavior:"history",

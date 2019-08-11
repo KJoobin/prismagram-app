@@ -50,7 +50,6 @@ export default ({ navigation }) => {
       const [first] = assets;
       await setSelectPhoto(first);
       await setAllPhotos(assets);
-      console.log(assets);
     } catch (e) {
       console.log(e);
     } finally {
@@ -115,7 +114,7 @@ export default ({ navigation }) => {
               keyExtractor={ item => item.id}
               renderItem={({item}) =>
               <Touchable
-              activeOpacity={100}
+              activeOpacity={1}
               ref="touch"
               onPress={() => {
                 setSelectPhoto(item)
