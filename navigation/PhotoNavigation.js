@@ -1,4 +1,6 @@
+import React from 'react';
 import { createMaterialTopTabNavigator, createStackNavigator } from 'react-navigation';
+import { Text } from 'react-native';
 import SelectPhoto from '../screens/Photo/SelectPhoto'
 import TakePhoto from '../screens/Photo/TakePhoto'
 import UploadPhoto from '../screens/Photo/UploadPhoto'
@@ -13,9 +15,17 @@ const stackFactory = (initialRoute, customConfig) =>
         ...customConfig
       }
     },
-    UploadPhoto,
+    UploadPhoto: {
+      screen:UploadPhoto,
+      mode:"modal",
+      navigationOptions:{
+        mode:"modal",
+        headerTitle:<Text style={{fontSize:16,fontWeight:"600"}}>새 게시글</Text>
+      }
+    },
     },{
       defaultNavigationOptions: {
+        mode:"modal",
         headerStyle:{
           ...stackStyles
         },
