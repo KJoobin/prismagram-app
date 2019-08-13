@@ -20,7 +20,6 @@ export default class extends React.Component {
       term:"",
       typing:false,
     };
-
     navigation.setParams({
       term : this.state.term,
       onSubmit : this.onSubmit,
@@ -49,18 +48,16 @@ export default class extends React.Component {
     const { navigation } = this.props
     this.setState({
       term : text,
+      typing:true,
     });
     navigation.setParams({
-      term: text
+      term: text,
     })
-    setTimeout(()=> {
-      this.setState({ typing:true })
-    },5000);
   };
 
   shouldComponentUpdate(_,nextState){
-    console.log(nextState.typing);
-    return ( this.state.term === nextState.term && nextState.typing !== this.state.typing )
+    this.state.term === nextState.term && this.state.typing && this.setState({typing:false})
+    return ( nextState.term !== "" && this.state.term !== nextState.term || this.state.typing !== nextState.typing)
   };
 
   componentDidUpdate(){

@@ -63,7 +63,6 @@ const SearchContainer = ({ term, typing, navigation }) => {
       variables:{ term: term },
       update: (_, { data }) => {
         setUsers(data.searchUser)
-        console.log(data.searchUser);
       }
     })
   const searchPostMutation = async () => {
@@ -78,9 +77,6 @@ const SearchContainer = ({ term, typing, navigation }) => {
       setOnce(false);
     }
   }
-  // if(!typing && !once) {
-  //   setOnce(true);
-  // }
 
   if( typing && !loading && once ) {
     searchPostMutation();
