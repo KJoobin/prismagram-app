@@ -8,8 +8,9 @@ export const NavIcon = ({
   color="black",
   size=32,
   focused=true,
+  style={}
 }) => (
-  <Ionicons  name={name} color={focused ? color : styles.darkGreyColor } size={size} />
+  <Ionicons  style={style}name={name} color={focused ? color : styles.darkGreyColor } size={size} />
 )
 
 NavIcon.Proptypes = {
@@ -17,6 +18,7 @@ NavIcon.Proptypes = {
   color:Proptypes.string,
   size:Proptypes.number,
   focused: Proptypes.bool,
+  style:Proptypes.object
 }
 
 export default NavIcon;

@@ -13,6 +13,7 @@ const stackFactory = (initialRoute, customConfig) =>
         ...customConfig
       }
     },
+    UploadPhoto,
     },{
       defaultNavigationOptions: {
         headerStyle:{

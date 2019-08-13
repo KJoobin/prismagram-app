@@ -21,7 +21,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     const { navigation } = props;
-
+    this.camera = "";
     this.state = {
       hasPermission:false,
       type:"back",
@@ -29,16 +29,18 @@ export default class extends React.Component {
       camera:"",
       onCamera:true,
       capture:[],
+      selectPhoto:"",
     }
   }
 
   static navigationOptions = ({ navigation }) => {
+    const capture = navigation.getParam("capture",[])
     return ({
     headerLeft:
     <Touchable onPress={() => { navigation.goBack(null) }}>
       <NavIcon style={{paddingLeft:15}} name={"ios-arrow-back"} />
     </Touchable>,
-    headerRight:<Touchable style={{paddingRight:10}}>{navigation.getParam("onCamera",true) === false && <Text>완료</Text> }</Touchable>
+    headerRight:<Touchable style={{paddingRight:10}} onPress={() => navigation.navigate("UploadPhoto",{ capture })}>{capture.length > 0 && <Text>완료</Text> }</Touchable>
   })
 };
 
@@ -54,7 +56,7 @@ export default class extends React.Component {
     }
   }
   cameraRef = (ref) => {
-  this.state.camera === "" && this.setState({camera:ref})
+  this.camera = ref;
   }
 
   reverseCamera = () => {
@@ -65,52 +67,78 @@ export default class extends React.Component {
   }
   takePhoto = async (e) => {
     try {
-      if(this.state.camera !== ""){
-
-        const { uri } = await this.state.camera.takePictureAsync();
-        this.state.capture.push(uri);
-        this.setState({capture:this.state.capture});
+      if(this.camera !== ""){
+        const { navigation } = this.props;
+        const { capture } = this.state
+        const { uri } = await this.camera.takePictureAsync();
+        capture.push(uri);
+        this.setState({ capture:capture, selectPhoto:uri});
+        navigation.setParams({capture:capture})
         // const asset = await MediaLibrary.createAssetAsync(uri);
         // const { assets } = await MediaLibrary.getAssetsAsync();
       }
     } catch (e) {
       console.log(e);
     } finally {
-      const { navigation } = this.props;
-      navigation.setParams({onCamera:false})
       this.setState({onCamera:false});
     }
   }
+  addPhoto = () => {
+    const { capture } = this.state
+    capture.length < 10 && this.setState({ onCamera:true })
+  }
+
+  removePhoto = () => {
+    const { capture, selectPhoto } = this.state
+    const index = capture.indexOf(selectPhoto);
+    capture.splice(index,1)
+    this.setState({ capture:capture })
+    if(capture.length === 0 ) {
+      this.setState({ onCamera:true });
+    } else if (index > 0) {
+      this.setState({ selectPhoto:capture[index - 1] });
+    } else if (index === 0 ) {
+      this.setState({ selectPhoto:capture[index] });
+    }
+  }
+  changeSelect = (uri) => {
+    this.setState({ selectPhoto:uri });
+  }
+
   componentDidMount(){
     this.permissionCamera()
   }
 
   render() {
-   return (
-       <View>
-         {
-           this.state.hasPermission ?
-           <View>
-             {this.state.onCamera ?<Camera
-               hasPermission={this.state.hasPermission}
-               type={this.state.type}
-               flash={this.state.flash}
-               camera={this.state.camera}
-               onCamera={this.state.onCamera}
-               capture={this.state.capture}
-               reverseCamera={this.reverseCamera}
-               flashChange={this.flashChange}
-               takePhoto={this.takePhoto}
-               cameraRef={this.cameraRef}
-               />:
-               <UploadPhoto
-                 photos={this.state.capture}
-                 setState={this.setState} />
-           }
+    return (
+      <View>
+        {
+          this.state.hasPermission ?
+            <View>
+              {this.state.onCamera ?<Camera
+                hasPermission={this.state.hasPermission}
+                type={this.state.type}
+                flash={this.state.flash}
+                camera={this.camera}
+                onCamera={this.state.onCamera}
+                capture={this.state.capture}
+                reverseCamera={this.reverseCamera}
+                flashChange={this.flashChange}
+                takePhoto={this.takePhoto}
+                cameraRef={this.cameraRef}
+                /> :
+                <UploadPhoto
+                  photos={this.state.capture}
+                  addPhoto={this.addPhoto}
+                  selectPhoto={this.state.selectPhoto}
+                  removePhoto={this.removePhoto}
+                  changeSelect={this.changeSelect}
+                    />
+               }
            </View> :
-             <Text>TakePhoto</Text>
-         }
-       </View>
+           <Text>TakePhoto</Text>
+       }
+      </View>
     )
   }
 }

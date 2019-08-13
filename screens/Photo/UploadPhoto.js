@@ -12,8 +12,11 @@ const Text = styled.Text`
 
 `;
 
-export default (props) => (
-  <View>
-    <Text>UploadPhoto</Text>
-  </View>
-)
+export default ({ navigation, }) => {
+  console.log(navigation.getParam("capture",[]))
+  return(
+    <View>
+      <Text>UploadPhoto</Text>
+    </View>
+  )
+}
