@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, ActivityIndicator, Image, Form } from 'react-native';
 import styled from 'styled-components';
-import useInput from '../../Hooks/useInput';
 import NavIcon from '../../components/NavIcon';
 import Swiper from 'react-native-swiper';
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -25,7 +24,10 @@ const Tag = styled.View`
   background-color:#D8E8F2;
   margin-right:10px;
 `;
-const Img = styled.Image``;
+const Img = styled.Image`
+  width:${constans.width - 30}px;
+  height:${constans.width}px;
+`;
 const Text = styled.Text``;
 
 const TextInput = styled.TextInput`
@@ -47,6 +49,7 @@ export default class extends React.Component {
       tag:[],
       files:navigation.getParam("capture",[]),
       bio:"",
+      loading:true,
     })
   }
 
@@ -65,6 +68,7 @@ export default class extends React.Component {
     if(e[e.length - 1] !== " ")
       this.setState({text:e});
   }
+
   onKeyPress = ({nativeEvent}) => {
     const { navigation } = this.props;
     const { key } = nativeEvent;
@@ -85,25 +89,23 @@ export default class extends React.Component {
     this.setState({bio:e})
     navigation.setParams({ bio:e })
   }
-  edit = () => {
-    console.log(edit);
-  }
   render(){
-    const { text, tag, bio,files } = this.state;
+    const { text, tag, bio, files, loading } = this.state;
     return(
       <View style={{flex:1, padding:10,}}>
         <BioColumn>
-          <Text style={{fontWeight:"500", fontSize:16, marginLeft:constans.width / 12.5, alignSelf:"flex-start"}}>게시글</Text>
+        <Text style={{fontWeight:"500", fontSize:16, marginLeft:constans.width / 12.5, alignSelf:"flex-start"}}>
+          게시글
+        </Text>
           <TextInput style={{marginBottom:10, marginTop:10, height:constans.height / 10}} autoCompleteType={"off"}  multiline={true} placeholder={"지금 기분을 표현하세요..."} value={bio} onChangeText={this.onChange} />
-          <Text style={{fontWeight:"500", fontSize:16, marginLeft:constans.width / 12.5, alignSelf:"flex-start"}} > 장소 태그하기 </Text>
+          <Text style={{fontWeight:"500", fontSize:16, marginLeft:constans.width / 12.5, alignSelf:"flex-start"}} >
+            장소 태그하기
+          </Text>
           <TextInput returnKeyType={"go"} style={{marginBottom:10, marginTop:10,}} autoCompleteType={"off"} placeholder={"#prisma #관련된 #장소를 #추가해주세요"} value={text} onChangeText={this.hashtagInput} onKeyPress={this.onKeyPress} />
         </BioColumn>
         <FlatList
           data={tag}
-          extraData={tag}
           horizontal={true}
-          refreshing={false}
-          onRefresh={() => null}
           keyExtractor={(item) => item}
           renderItem={({item}) =>
               <Tag>
@@ -111,10 +113,14 @@ export default class extends React.Component {
               </Tag>
           }/>
           <ImageColumn>
-            <Swiper dot=<View style={{backgroundColor:'rgba(255,255,255,1)', width: 4, height: 4, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3,}} /> >
+          {files.length > 1 ? 
+            < Swiper autoplay={true} loop={false}>
             {files.map((file,index) =>
-              <Img style={{ width:constans.width - 30, height:constans.width }} key={index} source={{url:file}} />)}
-            </Swiper>
+            <Img key={index} source={{ url: file.uri }} />
+            )}
+          </Swiper> : 
+          < Img source={{url:files[0].uri}} /> 
+            }
           </ImageColumn>
       </View>
     )
