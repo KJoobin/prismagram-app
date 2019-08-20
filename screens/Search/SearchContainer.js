@@ -49,11 +49,12 @@ const SEARCH_USER = gql`
     }
   }
 `;
-const SearchContainer = ({ term, typing, navigation }) => {
-  const [once, setOnce ] = useState(true);
+const SearchContainer = ({ term, navigation }) => {
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+
   const [searchPost] = useMutation(SEARCH_POST,{
     variables:{ term: term },
     update:(_,{ data: { searchPost : data } }) => {
@@ -72,29 +73,22 @@ const SearchContainer = ({ term, typing, navigation }) => {
       await searchUser();
     } catch (e) {
       console.log(e);
+      setLoading(false);
     } finally {
       setLoading(false);
-      setOnce(false);
     }
   }
-
-  if( typing && !loading && once ) {
+  if( term !== search ) {
+    setSearch(term);
     searchPostMutation();
   };
 
-  let columnStyle;
-  if(posts.length > 1) {
-     columnStyle = { flexDirection:"column"}
-  }
-  useEffect( ()=> {
-    setOnce(true);
-  },[typing])
   return(
     <TouchableWithoutFeedback>
     { loading ?
       <Loader / > :
       <View>
-      {users.length > 1 && <FlatList
+      {users.length > 0 && <FlatList
         horizontal={true}
         data={users}
         keyExtractor={ item => item.id}
@@ -132,7 +126,6 @@ const SearchContainer = ({ term, typing, navigation }) => {
 
 SearchContainer.propTypes = {
   term:PropTypes.string.isRequired,
-  typing:PropTypes.bool.isRequired,
 };
 
 export default SearchContainer;

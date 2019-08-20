@@ -18,7 +18,6 @@ export default class extends React.Component {
     const { navigation } = props;
     this.state = {
       term:"",
-      typing:false,
     };
     navigation.setParams({
       term : this.state.term,
@@ -48,26 +47,16 @@ export default class extends React.Component {
     const { navigation } = this.props
     this.setState({
       term : text,
-      typing:true,
     });
     navigation.setParams({
       term: text,
     })
   };
 
-  shouldComponentUpdate(_,nextState){
-    this.state.term === nextState.term && this.state.typing && this.setState({typing:false})
-    return ( nextState.term !== "" && this.state.term !== nextState.term || this.state.typing !== nextState.typing)
-  };
 
-  componentDidUpdate(){
-    this.setState({
-      typing:false
-    });
-  }
   render() {
    return (
-        <SearchContainer navigation={this.props.navigation} term={this.state.term} typing={this.state.typing} />
+        <SearchContainer navigation={this.props.navigation} term={this.state.term} />
     )
   }
 }
