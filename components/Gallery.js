@@ -35,7 +35,7 @@ const EDIT_USER = gql `
 export default ({
     setEditAvatar,
     photo,
-    ME,
+    refetch,
 }) => {
     const [hasPermission, setHasPermission] = useState(false);
     const [photos, setPhotos] = useState();
@@ -70,7 +70,6 @@ export default ({
         const uri = file.uri;
         const formdata = new FormData();
         formdata.append("file", { name, type, uri });
-
         try {
             const {data: { location: imageUpload }} = await axios({
                 url: `${process.env.NODE_ENV === "development" ? "http://localhost:4000" : "https://prismagram1.herokuapp.com/"}/api/image`,
@@ -85,11 +84,14 @@ export default ({
                 variables: {
                     photo: imageUpload
                 },
-                refetchQueries: [`me`]
             });
+            await refetch();
             setEditAvatar(false);
         } catch (error) {
-            console.log(error);
+            const { response } = error;
+            console.log(response.data);
+            console.log(response.status);
+            console.log(response.headers);
             setLoading(false);
         }
     }

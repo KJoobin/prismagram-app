@@ -37,7 +37,6 @@ const Avatar = styled.Image`
   width:${constans.width / 4};
   height:${constans.width / 4};
   border-radius: 50;
-  background-color:black;
   margin-right:15px;
 `;
 const Bold = styled.Text`
@@ -54,7 +53,6 @@ const BioText = styled.Text`
 const User =  ({
   posts,
   photo,
-  setPhoto,
   fullName,
   navigation,
   postCount,
@@ -68,7 +66,8 @@ const User =  ({
   editProfile,
   cancel,
   modal,
-  setModal
+  setModal,
+  setEditAvatar
  }) => {
   return (
     <>
@@ -80,7 +79,11 @@ const User =  ({
         bio={bio}
         cancel={cancel}
         editBio={editBio}
-        setModal={setModal}/>}
+        setModal={setModal}
+        navigation={navigation}
+        setEditAvatar={setEditAvatar}
+        />
+        }
     <ScrollView style={{backgroundColor:styles.bgColor}}>
       <UserWapper>
           <Avatar source={{uri : photo}} />

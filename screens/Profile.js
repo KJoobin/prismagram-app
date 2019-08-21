@@ -53,10 +53,7 @@ export default ({ navigation }) => {
     setBio(data.me.bio);
     setModal(false);
   }
-  useEffect(() => {
-    refetch();
-  },[])
-  console.log(photo);
+  useEffect(()=> setPhoto(data.me.photo),[data.me.photo])
   return (
     <View>
     {loading ?
@@ -66,7 +63,7 @@ export default ({ navigation }) => {
           editAvatar ? < Gallery 
           setEditAvatar={setEditAvatar}
           photo={photo}
-          ME={ME}
+          refetch={refetch}
           /> :
       <User
         posts={data.me.posts}
