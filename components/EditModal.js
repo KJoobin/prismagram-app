@@ -7,6 +7,7 @@ import styles from '../styles';
 import { gql } from 'apollo-boost';
 import { useMutation } from 'react-apollo-hooks';
 import Loader from './Loader';
+import Gallery from './Gallery';
 
 
 const Touchable = styled.TouchableOpacity`
@@ -81,7 +82,16 @@ const EDIT_USER = gql`
     }
   }
 `;
-const EditModal = ({ fullName ,photo ,email ,bio, cancel, editBio, setModal }) => {
+const EditModal = ({
+    fullName,
+    photo,
+    email,
+    bio,
+    cancel,
+    editBio,
+    setModal,
+    setEditAvatar,
+  }) => {
   const [editUserMutation, { loading }] = useMutation(EDIT_USER,{
     variables: {
       bio:bio,
@@ -103,6 +113,10 @@ const EditModal = ({ fullName ,photo ,email ,bio, cancel, editBio, setModal }) =
       }
     }
   }
+  const changePhoto = async () => {
+    setEditAvatar(true);
+    setModal(false);
+  }
   return (
   <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
   <ModalWapper>
@@ -110,7 +124,13 @@ const EditModal = ({ fullName ,photo ,email ,bio, cancel, editBio, setModal }) =
   {loading && <Loader/>}
     <Avatar source={{uri:photo}} />
     <Touchable style={{alignSelf:"center",marginBottom:10,}}>
-      <Button title={"프로필 사진 변경"} />
+      < Button title = {
+        "프로필 사진 변경"
+      }
+      onPress = {
+        changePhoto
+      }
+      />
     </Touchable>
     <Bold>email</Bold>
     <Input value={email}/>

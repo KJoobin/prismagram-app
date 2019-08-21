@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 import { FlatList, TouchableOpacity } from 'react-native';
 import Loader from '../components/Loader';
 import User from '../components/User';
+import Gallery from '../components/Gallery';
 
 const ME = gql`
     {
@@ -41,6 +42,7 @@ export default ({ navigation }) => {
   const [ photo, setPhoto ] = useState(data.me.photo)
   const [ bio, setBio ] = useState(data.me.bio)
   const [ modal, setModal ] = useState(false)
+  const [editAvatar, setEditAvatar] = useState(false);
   const editBio = (e) => {
     setBio(e);
   }
@@ -51,10 +53,21 @@ export default ({ navigation }) => {
     setBio(data.me.bio);
     setModal(false);
   }
+  useEffect(() => {
+    refetch();
+  },[])
+  console.log(photo);
   return (
     <View>
     {loading ?
       <Loader /> :
+      <View>
+        {
+          editAvatar ? < Gallery 
+          setEditAvatar={setEditAvatar}
+          photo={photo}
+          ME={ME}
+          /> :
       <User
         posts={data.me.posts}
         photo={photo}
@@ -73,7 +86,10 @@ export default ({ navigation }) => {
         cancel={cancel}
         modal={modal}
         setModal={setModal}
+        setEditAvatar={setEditAvatar}
         />
+        }
+        </View>
     }
     </View>
   )
