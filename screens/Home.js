@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FlatList } from 'react-native'
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -8,7 +8,7 @@ import Loader from '../components/Loader';
 import Post from '../components/Post';
 
 
-const SEE_FEED = gql`
+export const SEE_FEED = gql`
   query seeFeed{
     seeFeed{
       id
@@ -56,14 +56,19 @@ const Text = styled.Text`
 `;
 
 export default () => {
-  console.log("home");
   const [ refresh, setRefresh ] = useState(false);
   const { data  , loading, refetch } = useQuery(SEE_FEED);
-  const refreshHandle = () => {
-    setRefresh(true);
-    refetch();
-    setRefresh(false);
-    console.log('..')
+  const refreshHandle = async () => {
+    try {
+      setRefresh(true);
+      refetch();
+    } catch (e) {
+      console.log(e);
+    } finally {
+        setRefresh(false);
+    }
+
+
   }
   return (
     <>
